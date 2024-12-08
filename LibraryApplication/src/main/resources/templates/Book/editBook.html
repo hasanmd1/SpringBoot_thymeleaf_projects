@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/javascript/other.js"></script>
+    <title>Edit Book</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Edit A Book</h1>
+    </header>
+
+    <main>
+        <form th:action="@{/user/{userId}/book/{bookId}/editBook(userId=${user.id}, bookId=${book.id})}" method="post" th:object="${bookDTO}">
+            <div class="form-header">
+                <h2>Edit Book</h2>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" th:placeholder="${bookDTO.title}" th:field="*{title}" required>
+                <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="ISBN">ISBN:</label>
+                <input type="text" id="ISBN" name="ISBN" th:placeholder="${bookDTO.ISBN}" th:field="*{ISBN}" required>
+                <div class="error" th:if="${#fields.hasErrors('ISBN')}" th:errors="*{ISBN}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="publicationDate">Publication Year:</label>
+                <input type="date" id="publicationDate" name="publicationDate" th:placeholder="${bookDTO.publicationDate}" th:field="*{publicationDate}">
+                <div class="error" th:if="${#fields.hasErrors('publicationDate')}" th:errors="*{publicationDate}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="publisher">Publisher:</label>
+                <input type="text" id="publisher" name="publisher" th:placeholder="${bookDTO.publisher}" th:field="*{publisher}">
+                <div class="error" th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="numberOfCopies">Number of Copies:</label>
+                <input type="number" id="numberOfCopies" name="numberOfCopies" th:placeholder="${bookDTO.numberOfCopies}" th:field="*{numberOfCopies}" required>
+                <div class="error" th:if="${#fields.hasErrors('numberOfCopies')}" th:errors="*{numberOfCopies}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="genreIds">Genre:</label>
+                <select id="genreIds" name="genreIds">
+                    <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}" th:data-id="${genre.id}"></option>
+                </select>
+                <button class="btn" type="button" onclick="addItem('genreIds', 'genreList', 'genreIds')">Add Genre</button>
+                <div class="selected-List" id="genreList">
+                    <!-- Existing genres -->
+                    <div th:each="genre : ${genres}" class="item">
+                        <span th:text="${genre.name}" th:data-id="${genre.id}"></span>
+                        <button type="button" th:onclick="|removeItem('genreIds', 'genreList', 'genreIds', ${genre.id})|">X</button>
+                        <input type="hidden" name="genreIds" th:value="${genre.id}">
+                    </div>
+                </div>
+                <!--                <div class="error" th:if="${#fields.hasErrors('genre')}" th:errors="*{genreIds}"></div>-->
+            </div>
+
+            <div class="form-group">
+                <label for="bookAuthorIds">Author:</label>
+                <select id="bookAuthorIds" name="bookAuthorIds">
+                    <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.firstName + ' ' + author.lastName}" th:data-id="${author.id}"></option>
+                </select>
+                <button class="btn" type="button" onclick="addItem('bookAuthorIds', 'authorList', 'bookAuthorIds')">Add Author</button>
+                <div class="selected-List" id="authorList">
+                    <!-- Existing authors -->
+                    <div th:each="author : ${authors}" class="item">
+                        <span th:text="${author.firstName + ' ' + author.lastName}" th:data-id="${author.id}"></span>
+                        <button type="button" th:onclick="|removeItem('bookAuthorIds', 'authorList', 'bookAuthorIds', ${author.id})|">X</button>
+                        <input type="hidden" name="bookAuthorIds" th:value="${author.id}">
+                    </div>
+                </div>
+<!--                <div class="error" th:if="${#fields.hasErrors('author')}" th:errors="*{bookAuthorIds}"></div>-->
+            </div>
+
+            <div class="error" th:if="${invalid}">
+                <p>Invalid data provided. Please try again.</p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Update Book</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Application. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

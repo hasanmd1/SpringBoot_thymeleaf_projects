@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Search A User</title>
+</head>
+<body>
+
+    <header>
+        <h1>Search Users</h1>
+    </header>
+
+    <nav class="navbar">
+        <a th:href="@{/user/${user.id}}">User Dashboard</a>
+        <a th:href="@{/user/${user.id}/book}">Books</a>
+        <a th:href="@{/user/${user.id}/reservation}">Reservations</a>
+        <a th:href="@{/user/${user.id}/genre}">Genres</a>
+        <a th:href="@{/user/${user.id}/author}">Authors</a>
+    </nav>
+
+    <main>
+        <form th:action="@{'/user/' + ${user.id} + '/searchUser'}" method="get" class="form-container">
+            <div class="form-group">
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search" placeholder="Search A User" required>
+<!--                <div class="error" th:if="${#fields.hasErrors('search')}" th:errors="*{search}"></div>-->
+            </div>
+            <br>
+            <div class="form-actions">
+                <button type="submit">Search</button>
+            </div>
+        </form>
+        <hr>
+        <div th:if="${userList.size() > 0}">
+            <h2>Search Results:</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Edit User</th>
+                            <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Delete User</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${userList}">
+                            <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.role}"></td>
+                            <td>
+                                <button type="button" class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/editUser'|">
+                                    Edit
+                                </button>
+                            </td>
+                            <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                                <button type="button" class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/deleteUser'|">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Application. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

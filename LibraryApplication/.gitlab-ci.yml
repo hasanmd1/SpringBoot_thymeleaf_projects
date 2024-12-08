@@ -1,0 +1,52 @@
+stages:
+    - build
+    - test
+    - coverage
+    - analyze
+    - deploy
+
+cache:
+    paths:
+        - ~/.gradle/caches
+        - ~/.gradle/wrapper
+
+build:
+    stage: build
+    image: gradle:jdk21
+    script:
+        - ./gradlew build --no-daemon
+    artifacts:
+        paths:
+            - build/libs/*.jar
+
+test:
+    stage: test
+    image: gradle:jdk21
+    script:
+        - ./gradlew test --no-daemon
+
+coverage:
+    stage: coverage
+    image: gradle:jdk21
+    script:
+        - ./gradlew jacocoTestReport --no-daemon
+    artifacts:
+        paths:
+            - build/reports/jacoco/test/jacocoTestReport.xml
+
+analyze:
+    stage: analyze
+    image: gradle:jdk21
+    when: manual
+    script:
+      - ./gradlew sonarqube -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_TOKEN
+
+deploy:
+    stage: deploy
+    image: gradle:jdk21
+    script:
+        - echo "Deploying the application..."
+
+    when: manual
+    only:
+        - main

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Email Verification</title>
+</head>
+<body>
+    <header>
+        <h1>Email Verification</h1>
+    </header>
+
+    <main>
+        <p>Thank you for signing up, <span th:text="${user.username}"></span>! Please check your email to verify your account.</p>
+        <p>An email has been sent to <span th:text="${user.email}"></span></p>
+        <p>Click the link in the email to verify your account.</p>
+        <p>If you did not receive the email, please check your spam folder.</p>
+        <p>If you didn't receive email, <a th:href="@{/signup/resendVerification(email=${user.email})}">click here</a> to resend the verification email.</p>
+    </main>
+
+</body>
+</html>

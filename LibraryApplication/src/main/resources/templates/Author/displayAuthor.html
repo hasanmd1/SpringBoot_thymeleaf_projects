@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Authors Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>Authors</h1>
+    </header>
+
+    <nav class="navbar">
+        <a th:href="@{/user/{userId}(userId=${user.id})}">Profile</a>
+        <a th:href="@{/user/{userId}/book(userId=${user.id})}">Books</a>
+        <a th:href="@{/user/{userId}/reservation(userId=${user.id})}">Reservations</a>
+        <a th:href="@{/user/{userId}/bookGenre(userId=${user.id})}">Genres</a>
+        <a th:href="@{/logout}">Logout</a>
+    </nav>
+
+
+    <main>
+        <div class="align-right-button" th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+            <button class="btn" type="button"
+                    th:onclick="|window.location.href='/user/'+${user.id}+'/author/createAuthor'|">Create Author</button>
+        </div>
+        <table class="table-container">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Edit Author</th>
+                    <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Delete Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="author : ${authors}">
+                    <td th:text="${author.firstName}"></td>
+                    <td th:text="${author.lastName}"></td>
+                    <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                        <button class="btn"
+                                th:onclick="|window.location.href='/user/'+${user.id}+'/author/'+${author.id}+'/editAuthor'|">
+                            Edit
+                        </button>
+                    </td>
+                    <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                        <button class="btn"
+                                th:onclick="|window.location.href='/user/'+${user.id}+'/author/'+${author.id}+'/deleteAuthor'|">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="align-right-button">
+            <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}|">
+                Go Back
+            </button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Application. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

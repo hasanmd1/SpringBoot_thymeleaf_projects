@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Successfully Reset Link Sent</title>
+</head>
+<body>
+
+  <header>
+    <h1>Successfully Password Reset Link Sent</h1>
+  </header>
+
+  <main>
+    <div>
+      <p>A password reset link has been sent to <span th:text="${user.email}"></span></p>
+      <p>Please check your email to reset your password.</p>
+    </div>
+    <br>
+    <button type="submit" class="btn">
+      <a class="white-text" th:href="@{/forgotPassword/resend/(email=${user.email})}">Resend Reset Password Link</a>
+    </button>
+    <br>
+    <div class="btn-container">
+      <a href="/login" class="btn">Log In</a>
+    </div>
+  </main>
+
+</body>
+</html>

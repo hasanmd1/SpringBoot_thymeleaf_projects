@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/javascript/main.js"></script>
+    <title>Edit Genre Page</title>
+</head>
+<body>
+
+    <header>
+        <h1>Edit A Genre</h1>
+    </header>
+
+    <main>
+        <form th:action="@{/user/{userId}/bookGenre/{bookGenreId}/editBookGenre(userId=${user.id}, bookGenreId=${genre.id})}" method="post" th:object="${genreDTO}">
+            <div class="form-header">
+                <h2>Edit Genre</h2>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Genre:</label>
+                <input type="text" id="name" name="name" th:placeholder="${genreDTO.name}" th:field="*{name}" required>
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="error" th:if="${invalid}">
+                <p>Invalid Genre Name.</p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Save Changes</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Library Management System. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

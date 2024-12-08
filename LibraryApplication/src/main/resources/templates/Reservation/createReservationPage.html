@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Create A Reservation</title>
+</head>
+<body>
+    <header>
+        <h1>Create A Reservation</h1>
+    </header>
+
+    <main>
+        <form th:action="@{/user/{userId}/reservation/createReservation(userId=${user.id})}" method="post" th:object="${reservation}">
+            <div class="form-header">
+                <h2>Create Reservation</h2>
+            </div>
+
+            <div class="form-group">
+                <label for="reservationDate">Reservation Date:</label>
+                <input type="date" id="reservationDate" name="reservationDate" th:field="*{reservationDate}" required>
+                <div class="error" th:if="${#fields.hasErrors('reservationDate')}" th:errors="*{reservationDate}"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="bookCopy">Book:</label>
+                <select id="bookCopy" name="bookCopy" th:field="*{bookCopy}">
+                    <option th:each="bookCopy : ${bookCopies}" th:value="${bookCopy.id}" th:text="${bookCopy.book.title}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('bookCopy')}" th:errors="*{bookCopy}"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="user">Borrower:</label>
+                <select id="user" name="user" th:field="*{user}">
+                    <option th:each="borrower : ${users}" th:value="${borrower.id}" th:text="${borrower.username}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('user')}" th:errors="*{user}"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="reservationStatus">Reservation status:</label>
+                <select id="reservationStatus" name="reservationStatus" th:field="*{reservationStatus}">
+                    <option th:value="PENDING" th:text="PENDING">Pending</option>
+                    <option th:if="${user.role == 'LIBRARIAN' || user.role == 'ADMIN'}" th:text="ACTIVE" th:value="ACTIVE">Active</option>
+                    <option th:if="${user.role == 'LIBRARIAN' || user.role == 'ADMIN'}" th:text="RETURNED" th:value="RETURNED">Inactive</option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('reservationStatus')}" th:errors="*{reservationStatus}"></div>
+            </div>
+            <br>
+            <div class="form-group" th:if="${user.role == 'LIBRARIAN' || user.role == 'ADMIN'}">
+                <label for="returnDate" >Return Date:</label>
+                <input type="date" id="returnDate" name="returnDate" th:field="*{returnDate}">
+                <div class="error" th:if="${#fields.hasErrors('returnDate')}" th:errors="*{returnDate}"></div>
+            </div>
+
+            <div class="error" th:if="${invalid}">
+                <p>Invalid data provided. Please try again.</p>
+            </div>
+            <br>
+            <div class="form-actions">
+                <button type="submit" class="btn">Create Reservation</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Management System. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

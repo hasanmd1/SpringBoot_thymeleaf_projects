@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>User Dashboard</h1>
+    </header>
+
+    <nav class="navbar">
+        <a th:href="@{/user/{userId}/book(userId=${user.id})}">Books</a>
+        <a th:href="@{/user/{userId}/reservation(userId=${user.id})}">Reservations</a>
+        <a th:href="@{/user/{userId}/bookGenre(userId=${user.id})}">Genres</a>
+        <a th:href="@{/user/{userId}/author(userId=${user.id})}">Authors</a>
+        <a th:href="@{/logout}">Logout</a>
+    </nav>
+
+
+    <main>
+        <div class="align-right-button">
+            <button type="button" class="btn" th:onclick="|window.location.href='/resetPassword?userId='+${user.id}|">Reset Password</button>
+            <button type="button" class="btn" th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}" th:onclick="|window.location.href='/user/'+${user.id}+'/searchUser'|">Search User</button>
+            <button type="button" class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/editUser'|">Edit Profile</button>
+        </div>
+        <div class="user-info">
+            <p>Name: <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span></p>
+            <p>Username: <span th:text="${user.username}"></span></p>
+            <p>Email: <span th:text="${user.email}"></span></p>
+            <p>Phone: <span th:text="${user.phoneNumber}"></span></p>
+            <p>Address: <span th:text="${user.address}"></span></p>
+        </div>
+        <div class="tables">
+            <div class="table-container">
+                <div class="table-container-row">
+                    <h3>Reservation: </h3>
+                    <a th:href="@{/user/{userId}/reservation(userId=${user.id})}">View All</a>
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Reservation Date</th>
+                        <th>Return Date</th>
+                        <th>Fines</th>
+                        <th>Edit Reservation</th>
+                        <th>Delete Reservations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="reservation : ${reservations}">
+                        <td th:text="${reservation.bookCopy.book.title}"></td>
+                        <td th:text="${reservation.creationDate}"></td>
+                        <td th:text="${reservation.returnDate}"></td>
+                        <td th:text="${reservation.fine}"></td>
+                        <td>
+                            <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/reservation/' + ${reservation.id} + '/editReservation'|">
+                                Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/reservation/' + ${reservation.id} + '/deleteReservation'|">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <div class="table-container-row">
+                    <h3>Books: </h3>
+                    <a th:href="@{/user/{userId}/book(userId=${user.id})}">View All</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Publishing Date</th>
+                            <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Edit Borrowed Book</th>
+                            <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Delete Borrowed Book</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${books}">
+                            <td th:text="${book.title}"></td>
+                            <div th:each="bookAuthor : ${book.authors}">
+                                <td th:text="${bookAuthor.author.firstName} + ' ' + ${bookAuthor.author.lastName}"></td>
+                            </div>
+                            <td th:text="${book.publisher}"></td>
+                            <td th:text="${book.publicationDate}"></td>
+                            <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                                <button type="button" class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/book/'+${book.id}+'/editBook'|">
+                                    Edit
+                                </button>
+                            </td>
+                            <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                                <button type="button" class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/book/'+${book.id}+'/deleteBook'|">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-container">
+                <div class="table-container-row">
+                    <h3>Genre: </h3>
+                    <a th:href="@{/user/{userId}/bookGenre(userId=${user.id})}">View All</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Genre Name</th>
+                            <th>Number of Books</th>
+                            <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Edit Genre</th>
+                            <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Delete Genre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="genreStart : ${genre}">
+                            <td th:text="${genreStart.name}"></td>
+                            <td th:text="${genreStart.bookGenres.size()}"></td>
+                            <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                                <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/bookGenre/'+${genreStart.id}+'/editBookGenre'|">
+                                    Edit
+                                </button>
+                            </td>
+                            <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                                <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/bookGenre/'+${genreStart.id}+'/deleteBookGenre'|">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-container">
+                <div class="table-container-row">
+                    <h3>Author: </h3>
+                    <a th:href="@{/user/{userId}/author(userId=${user.id})}">View All</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Author Name</th>
+                            <th>Number of Written Books</th>
+                            <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Edit Author</th>
+                            <th th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">Delete Author</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="authorStart : ${author}">
+                            <td th:text="${authorStart.firstName} + ' ' + ${authorStart.lastName}"></td>
+                            <td th:text="${authorStart.bookAuthors.size()}"></td>
+                            <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                                <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/author/'+${authorStart.id}+'/editAuthor'|">
+                                    Edit
+                                </button>
+                            </td>
+                            <td th:if="${user.role == 'ADMIN' || user.role == 'LIBRARIAN'}">
+                                <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/author/'+${authorStart.id}+'/deleteAuthor'|">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Application. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

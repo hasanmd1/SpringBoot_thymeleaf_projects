@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Create Author</title>
+</head>
+<body>
+    <header>
+        Create A New Author
+    </header>
+
+    <main>
+        <form th:action="@{/user/{userId}/author/createAuthor(userId=${user.id})}" th:object="${author}" class="form-container" method="post">
+            <div class="form-header">
+                <h2>Create Author</h2>
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Enter first name" th:field="*{firstName}" required>
+                <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter last name" th:field="*{lastName}" required>
+                <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="user">User:</label>
+                <select id="user" name="user" th:field="*{user}">
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+                </select>
+            </div>
+            <br>
+            <div class="error" th:if="${invalid}">
+                <p>Invalid data provided. Please try again.</p>
+            </div>
+            <br>
+            <div class="form-actions">
+                <button type="submit" class="btn">Create</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Application. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

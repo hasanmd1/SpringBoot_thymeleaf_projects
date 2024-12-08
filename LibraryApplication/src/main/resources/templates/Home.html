@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Welcome</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Library Application</h1>
+    </header>
+
+    <nav class="navbar" th:if="${authenticated}">
+        <a th:href="@{/user/{userId}(userId=${user.id})}">Profile</a>
+        <a th:href="@{/user/{userId}/book(userId=${user.id})}">Books</a>
+        <a th:href="@{/user/{userId}/reservation(userId=${user.id})}">Reservations</a>
+        <a th:href="@{/user/{userId}/bookGenre(userId=${user.id})}">Genres</a>
+        <a th:href="@{/user/{userId}/author(userId=${user.id})}">Authors</a>
+        <a th:href="@{/logout}">Logout</a>
+    </nav>
+
+    <main>
+        <div th:unless="${authenticated}">
+            <p th:if="${logout}" class="success">Successfully Logged Out!</p>
+            <h2>Welcome to the Library Application!</h2>
+            <p>Log in to access your account, borrow books, or manage your profile.</p>
+            <p>Let's Get Started:</p>
+            <ul>
+                <li><button class="btn" type="button" onclick="window.location.href='/login'">Log In</button></li>
+                <li><button class="btn" type="button" onclick="window.location.href='/signup'">Sign Up</button></li>
+            </ul>
+        </div>
+
+        <div th:if="${authenticated}">
+            <h2>Welcome Back!</h2>
+            <p>We are glad to see you again. Explore your account, borrow books, or manage your profile.</p>
+            <p>Let's Get Started:</p>
+            <ul>
+                <li><button class="btn" type="button" th:onclick="|window.location.href='/user/' + ${user.id}|">Go to Profile</button></li>
+                <li><button class="btn" type="button" th:onclick="|window.location.href='/logout'|">Log Out</button></li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Application. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Edit Author</title>
+</head>
+<body>
+
+    <header>
+        <h1>Edit Author</h1>
+    </header>
+
+    <main>
+        <form th:action="@{/user/{userId}/author/{authorId}/editAuthor(userId=${userId}, authorId=${author.id})}" th:object="${authorDTO}" class="form-container" method="post">
+            <div class="form-header">
+                <h2>Edit Author</h2>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" th:placeholder="${author.firstName}" th:value="${authorDTO.firstName}" required>
+                <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" th:placeholder="${author.lastName}" th:value="${authorDTO.lastName}" required>
+                <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="user" >User:</label>
+                <select id="user" name="user" th:field="*{user}" th:placeholder="${author.user}" required>
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('user')}" th:errors="*{user}"></div>
+            </div>
+            <br>
+            <div class="error" th:if="${invalid}">
+                <p>Invalid data provided. Please try again.</p>
+            </div>
+            <br>
+            <div class="form-actions">
+                <button type="submit" class="btn">Save Changes</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Library Application. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

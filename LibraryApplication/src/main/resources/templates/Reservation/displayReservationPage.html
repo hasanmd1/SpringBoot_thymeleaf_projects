@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Display Reservation</title>
+</head>
+<body>
+
+    <header>
+        <h1>Reservations</h1>
+    </header>
+
+    <nav class="navbar">
+        <a th:href="@{/user/{userId}(userId=${user.id})}">Profile</a>
+        <a th:href="@{/user/{userId}/book(userId=${user.id})}">Books</a>
+        <a th:href="@{/user/{userId}/bookGenre(userId=${user.id})}">Genres</a>
+        <a th:href="@{/user/{userId}/author(userId=${user.id})}">Authors</a>
+        <a th:href="@{/logout}">Logout</a>
+    </nav>
+
+
+    <main>
+        <div class="btn-container">
+            <button type="button" class="btn align-right-button" th:onclick="|window.location.href='/user/'+${user.id}+'/reservation/createReservation'|">Add Reservation</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>User</th>
+                    <th>Creation Date</th>
+                    <th>Due Date</th>
+                    <th>Fine</th>
+                    <th>Reservation Status</th>
+                    <th>Edit Reservation</th>
+                    <th>Delete Reservation</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reservation : ${reservations}">
+                    <td th:text="${reservation.id}"></td>
+                    <td th:text="${reservation.bookCopy.book.title}"></td>
+                    <td th:text="${reservation.user.username}"></td>
+                    <td th:text="${reservation.dueDate}"></td>
+                    <td th:text="${reservation.fine}"></td>
+                    <td th:text="${reservation.reservationStatus}"></td>
+                    <td>
+                        <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/reservation/' + ${reservation.id} + '/editReservation'|">
+                            Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}+'/reservation/' + ${reservation.id} + '/deleteReservation'|">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="align-right-button">
+            <button class="btn" th:onclick="|window.location.href='/user/'+${user.id}|">
+                Go Back
+            </button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Management System. All rights reserved.</p>
+    </footer>
+
+
+</body>
+</html>
