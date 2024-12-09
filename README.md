@@ -104,30 +104,6 @@ docker-compose up
 
 The project is configured to use **GitHub Actions** for Continuous Integration (CI). It automatically builds, tests, and performs code analysis with **SonarQube** on each commit or pull request.
 
-
-## Project Structure
-.
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── wherever/
-│   │   │       └── whatever.whoever/
-│   │   │           └── mainfile/
-│   │   ├── resources/
-│   │   │   ├── application.properties
-│   │   │   ├── static (css, js, images)
-│   │   │   └── templates/
-│   │   │       └── html files
-├── target/ (for Maven build artifacts) or build/ (for Gradle build artifacts)
-├── docker-compose.yml
-├── Dockerfile
-├── pom.xml (for Maven) or build.gradle (for Gradle)
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── .gitlab-ci.yml
-└── README.md
-
 ### Building Docker Image
 
 To build the Docker image:
